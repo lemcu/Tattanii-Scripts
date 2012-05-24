@@ -10,8 +10,8 @@ This perl script generates the foot-prints a.k.a packages part of Eagle Library 
 
 #### Usage
 
-1.Change directory to /EMFootprintGen
-2.Run EMFootprintGen.sh
+1. Change directory to /EMFootprintGen
+2. Run EMFootprintGen.sh
     > This creates /Tattanii-Scripts/output/packages.pac
 
 ### EMLibGen
@@ -20,13 +20,13 @@ This Qt based application generates the complete Eagle Library for EFM32 devices
 
 #### Usage
 
-1.Open /Tattanii-Scripts/EMLibGen/src/EMLibGen.pro in QtCreator
-2.Make sure the Projects->Build directory is set to /Tattanii-Scripts/EMLibGen/build for both Debug and Release builds.
-3.Compile and Run.
-4.Open Footprint file packages.pac created using EMFootPrintGen
-5.Click `Open CSV File and Generate` button. Select all .csv files.
+1. Open /Tattanii-Scripts/EMLibGen/src/EMLibGen.pro in QtCreator
+2. Make sure the Projects->Build directory is set to /Tattanii-Scripts/EMLibGen/build for both Debug and Release builds.
+3. Compile and Run.
+4. Open Footprint file packages.pac created using EMFootPrintGen
+5. Click `Open CSV File and Generate` button. Select all .csv files.
     > This creates /Tattanii-Scripts/output/EnergyMicro.lbr
-6.Use `Save Eagle Library` button to save the generated library to another location (say /eagle/lbr/ folder)
+6. Use `Save Eagle Library` button to save the generated library to another location (say /eagle/lbr/ folder)
 
 ### What is in the name?
 
