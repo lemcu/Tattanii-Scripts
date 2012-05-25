@@ -185,49 +185,49 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
                         rxsub.setPattern("(IOVDD)_(\\d{1,})");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["IOVDD"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["D_IOVDD_R"][reList.at(2)]["PIN_ID"] = reList.at(1);  //A_ B_ C_ helps in auto-ordering of power pins
                         }
                         rxsub.setPattern("(AVDD)_(\\d{1,})");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["AVDD"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["E_AVDD_L"][reList.at(2)]["PIN_ID"] = reList.at(1);
 
                         }
                         rxsub.setPattern("(^AVSS)_(\\d{1,})");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["AVSS"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["G_AVSS_L"][reList.at(2)]["PIN_ID"] = reList.at(1);
 
                         }
                         rxsub.setPattern("(^VSS)");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["VSS"]["VSS_" + QString::number(vsspincount)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["F_VSS_R"]["VSS_" + QString::number(vsspincount)]["PIN_ID"] = reList.at(1);
                             vsspincount++;
 
                         }
                         rxsub.setPattern("(USB)_(\\w{1,})");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["USB"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["B_USB_L"][reList.at(2)]["PIN_ID"] = reList.at(1);
 
                         }
                         rxsub.setPattern("(RESETn)");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["OTHERS"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["AA_OTHERS_L"][reList.at(2)]["PIN_ID"] = reList.at(1);
 
                         }
                         rxsub.setPattern("(DECOUPLE)");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["OTHERS"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["AB_OTHERS_R"][reList.at(2)]["PIN_ID"] = reList.at(1);
 
                         }
                         rxsub.setPattern("(VDD_DREG)");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["OTHERS"][reList.at(2)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["C_VDDDREG_R"][reList.at(2)]["PIN_ID"] = reList.at(1);
 
                         }
 
@@ -242,7 +242,6 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
                 }
 
                 break;
-
 
             }
         }
@@ -282,7 +281,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
 
 
                 Symbol += "<pin name=\""+ pindesc +
-                        "\" x=\"0\" y=\"" +QString::number(y) +"\" length=\"middle\" />\n";
+                        "\" x=\"0\" y=\"" +QString::number(y) +"\" length=\"middle\" />\n"; //default direction "io"
 
                 Connect += "<connect gate=\""+port+"\" pin=\""+pindesc+"\" pad=\""+pinpad+"\"/>\n";
 
@@ -332,7 +331,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
         Symbol+= "<symbol name=\""+ SymbolName +"\">\n" ;
 
         int pincount = 0;
-        float y = 0;
+        float y = 0, x = 0;
         foreach (QString port, portBlock["POWER_PINS"].keys())
         {
 
@@ -342,32 +341,55 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
                 QString pindesc = QString(pin).replace(" ","");
                 QString pinpad =  QString(portBlock["POWER_PINS"][port][pin]["PIN_ID"]).replace(" ","");
 
-                Symbol += "<pin name=\""+ QString(pin).replace(" ","") +
-                        "\" x=\"0\" y=\"" +QString::number(y) +"\" length=\"middle\" />\n";
+                if(port.contains(QRegExp("_R$")))
+                {
+                    x = 2.54 * 15;
+                }
+                else
+                {
+                    x = 0;
+                }
+
+                if(pin == QString("RESETn"))
+                {
+                    Symbol += "<pin name=\""+ QString(pin).replace(" ","") +
+                            "\" x=\""+QString::number(x)+"\" y=\"" +QString::number(y) +"\" length=\"middle\" direction=\"pas\" function=\"dot\" ";
+                }
+                else
+                {
+                    Symbol += "<pin name=\""+ QString(pin).replace(" ","") +
+                            "\" x=\""+QString::number(x)+"\" y=\"" +QString::number(y) +"\" length=\"middle\" direction=\"pwr\" ";
+                }
+
+                if(port.contains(QRegExp("_R$")))
+                {
+                    Symbol +=  "rot=\"R180\" />\n";
+                }
+                else
+                {
+                    Symbol +=  " />\n";
+                }
 
                 Connect += "<connect gate=\""+QString("PWR")+"\" pin=\""+pindesc+"\" pad=\""+pinpad+"\"/>\n";
-
                 pincount++;
             }
-
-            //qDebug()<<stringlength<<" " <<textWidthInPixels;
 
             y = y - 2.54;
             pincount++;
 
         }
         Symbol +="<wire x1=\""+QString::number(2.54*2)+"\" y1=\""+QString::number(0)+
-                "\" x2=\""+QString::number(2.54*10)+"\" y2=\""+QString::number(0)+
+                "\" x2=\""+QString::number(2.54*13)+"\" y2=\""+QString::number(0)+
                 "\" width=\"0.254\" layer=\"94\"/>\n";
         Symbol +="<wire x1=\""+QString::number(2.54*2)+"\" y1=\""+QString::number(0)+
                 "\" x2=\""+QString::number(2.54*2)+"\" y2=\""+QString::number(-2.54 * (pincount+1) )+
                 "\" width=\"0.254\" layer=\"94\"/>\n";
         Symbol +="<wire x1=\""+QString::number(2.54*2)+"\" y1=\""+QString::number(-2.54 * (pincount+1))+
-                "\" x2=\""+QString::number(2.54*10)+"\" y2=\""+QString::number(-2.54 * (pincount+1))+
+                "\" x2=\""+QString::number(2.54*13)+"\" y2=\""+QString::number(-2.54 * (pincount+1))+
                 "\" width=\"0.254\" layer=\"94\"/>\n";
 
-        Symbol +="<wire x1=\""+QString::number(2.54*10)+"\" y1=\""+QString::number(0)+
-                "\" x2=\""+QString::number(2.54*10)+"\" y2=\""+QString::number(-2.54 * (pincount+1))+
+        Symbol +="<wire x1=\""+QString::number(2.54*13)+"\" y1=\""+QString::number(0)+
+                "\" x2=\""+QString::number(2.54*13)+"\" y2=\""+QString::number(-2.54 * (pincount+1))+
                 "\" width=\"0.254\" layer=\"94\"/>\n";
 
         Symbol +="<text x=\""+QString::number(2.54*2)+"\" y=\""+QString::number((-2.54 * (pincount+1))-0.254 )+"\" size=\"1.27\" align=\"top-left\" layer=\"95\">&gt;NAME</text>\n";
