@@ -50,6 +50,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
                 "",
                 "CSV (*.csv *.CSV)");
 
+    csvFiles.sort();
 
     foreach(QString filePath, csvFiles)
     {
@@ -202,7 +203,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
                         rxsub.setPattern("(^VSS)");
                         if(rxsub.indexIn(reList.at(2),0) != -1)
                         {
-                            portBlock["POWER_PINS"]["F_VSS_R"]["VSS_" + QString::number(vsspincount)]["PIN_ID"] = reList.at(1);
+                            portBlock["POWER_PINS"]["F_VSS_R"]["VSS@" + QString::number(vsspincount)]["PIN_ID"] = reList.at(1);
                             vsspincount++;
 
                         }
