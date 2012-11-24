@@ -67,7 +67,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
         QString re4 = "(/{2,2})\\s{1,}Package type;(\\w{1,})";
         QString re5 = "(/{2,2})\\s{1,}Pin count;(\\w{1,})";
         QString re6 = "(/{2,2})\\s{1,}Package dimensions;(.*)";
-        QString re7 = "(\\w{1,});(P{1,1}([A-G]{1,1})(\\d{1,}));(\\w{1,});(.{1,})";
+        QString re7 = "(\\w{1,});(P{1,1}([A-G]{1,1})(\\d{1,}));(\\w{1,});(.{0,})";
         QString re8 = "(\\w{1,});(\\w{1,});(\\w{1,});";
 
         QTextStream csvFileStream(&csvFile);
@@ -234,7 +234,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
 
                     }
                 }
-                else //Power pins
+                else // I/O Port
                 {
                     QStringList reList = rx.capturedTexts();
 
@@ -280,7 +280,6 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
                 QString pindesc = QString(portBlock["IO_PINS"][port][QString::number(pin)]["FUNCTIONALITY"]).replace(" ","");
                 QString pinpad =  QString(portBlock["IO_PINS"][port][QString::number(pin)]["PIN_ID"]).replace(" ","");
 
-
                 Symbol += "<pin name=\""+ pindesc +
                         "\" x=\"0\" y=\"" +QString::number(y) +"\" length=\"middle\" />\n"; //default direction "io"
 
@@ -297,12 +296,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
 
             int textWidthInPixels = fm.width(largeststring+ "WWW"); //compensate left offset
 
-            //qDebug()<<stringlength<<" " <<textWidthInPixels;
-
-            //y = y - 2.54;
-
-            QDesktopWidget *desk = QApplication::desktop();
-            int XDpi = desk->physicalDpiX(); //In my pc this is 96dpi
+            int XDpi = 96;
 
             Symbol +="<wire x1=\""+QString::number(2.54*2)+"\" y1=\""+QString::number(0)+
                     "\" x2=\""+QString::number((textWidthInPixels * 25.4 / XDpi) )+"\" y2=\""+QString::number(0)+
@@ -419,7 +413,6 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
 
         Symbols    += Symbol;
         DeviceSets += DeviceSet;
-
     }
 
     //Read Footprint (package) file
@@ -463,8 +456,6 @@ void MainWindow::on_pushButtonOpenPac_clicked()
                 "Footprint (*.pac *.PAC)");
     ui->lineEditPacPath->setText(pacFile);
 }
-
-
 
 void MainWindow::on_pushButton_clicked()
 {
