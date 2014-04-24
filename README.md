@@ -1,6 +1,6 @@
 ## Tattanii-Scripts
 
-Scripts and tools to generate EAGLE parts library for Energy Micro MCUs
+Scripts and tools to generate EAGLE parts library for EFM32 MCUs
 
 There are two parts in this tool :
 
