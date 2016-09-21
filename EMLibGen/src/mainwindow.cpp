@@ -247,6 +247,25 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
             }
         }
 
+        QStringList supportedPackages;
+        supportedPackages <<"QF" << "BGA";
+
+
+
+        bool supportedPackage = false;
+        foreach(QString packageName, supportedPackages)
+        {
+            if(portBlock["INFO"]["INFO"]["DESC"]["PACKAGE_TYPE"].contains(packageName))
+            {
+                supportedPackage = true;
+                break;
+            }
+        }
+        if(!supportedPackage)
+        {
+            continue;
+        }
+
         QString Symbol="";
         QString Gate="";
         QString Connect="";
@@ -398,7 +417,7 @@ void MainWindow::on_pushButtonOpenCSV_clicked()
 
         DeviceSet +=
 
-                "<deviceset name=\""+portBlock["INFO"]["INFO"]["DESC"]["PART_NAME"]+"\">\n" +
+                "<deviceset name=\""+portBlock["INFO"]["INFO"]["DESC"]["PART_NAME"]+ "\" prefix=\"" + ui->linePrefix->text() + "\">\n" +
                 "<description>"+portBlock["INFO"]["INFO"]["DESC"]["PART_NAME"] +  " " +
                 portBlock["INFO"]["INFO"]["DESC"]["CHIP_NAME"] +  " Microcontroller in " +
                 portBlock["INFO"]["INFO"]["DESC"]["PACKAGE_DIMENSIONS"] + " " +

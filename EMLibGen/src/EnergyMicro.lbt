@@ -55,12 +55,12 @@
 <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
 </layers>
 <library>
-<description>&lt;h2&gt; Energy Micro EFM32 Gecko, Tiny Gecko, Leopard Gecko and Giant Gecko Devices&lt;/h2&gt;
+<description>&lt;h2&gt; Energy Micro EFM32&lt;/h2&gt;
 &lt;h3&gt;CC0 License &lt;/h3&gt;
 To the extent possible under law, &lt;b&gt;Visweswara R (@viswesr)&lt;/b&gt; has waived all copyright and related or 
 &lt;br&gt;neighboring rights to &lt;b&gt;Energy Micro EFM32 Eagle parts library&lt;/b&gt;. 
 &lt;br&gt;
-&lt;br&gt;This work is published from: &lt;b&gt;India&lt;/b&gt;.</description>
+&lt;br&gt;Forked and changed by: &lt;b&gt;@cidadao&lt;/b&gt; (https://github.com/cidadao/Tattanii-Scripts)</description>
 <packages>
 <!--#pAcKaGeS#-->
 </packages>
